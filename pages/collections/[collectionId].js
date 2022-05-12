@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo,useContext } from 'react'
 import { useRouter } from 'next/router'
  import Link from 'next/link'
 import { useWeb3 } from '@3rdweb/hooks'
@@ -9,6 +9,7 @@ import { CgWebsite } from 'react-icons/cg'
 import { AiOutlineInstagram, AiOutlineTwitter } from 'react-icons/ai'
 import { HiDotsVertical } from 'react-icons/hi'
 import NFTCard from '../../components/NFTCard' 
+import { MariemContext } from '../../context/MariemContext'
 
 const style = {
   bannerImageContainer: `h-[20vh] w-screen overflow-hidden flex justify-center items-center`,
@@ -42,7 +43,11 @@ const Collection = () => {
   const [listings, setListings] = useState([])
 
   //
+  const { currentAccount, setCurrentAccount}  =useContext(MariemContext)
 
+  console.log('currentAccount'+ '🔥',currentAccount);
+  setCurrentAccount('khalil')
+  console.log(' new currentAccount'+ '🔥'+'🔥',currentAccount+ '🔥');
   const nftModule = useMemo(() => {
     if (!provider) return
 
@@ -84,6 +89,9 @@ const Collection = () => {
   }, [marketPlaceModule])
 
   const fetchCollectionData = async (sanityClient = client) => {
+
+
+
     const query = `*[_type == "marketItems" && contractAddress == "${collectionId}" ] {
       "imageUrl": profileImage.asset->url,
       "bannerImageUrl": bannerImage.asset->url,
@@ -98,7 +106,7 @@ const Collection = () => {
 
     const collectionData = await sanityClient.fetch(query)
 
-    console.log(collectionData, '🔥')
+   // console.log(collectionData, '🔥')
 
     // the query returns 1 object inside of an array
     await setCollection(collectionData[0])
@@ -108,8 +116,8 @@ const Collection = () => {
     fetchCollectionData()
   }, [collectionId])
 
-  console.log(router.query)
-  console.log(router.query.collectionId)
+//  console.log(router.query)
+ // console.log(router.query.collectionId)
   return (
     <div className="overflow-hidden">
 
